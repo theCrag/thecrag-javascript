@@ -1,26 +1,40 @@
+(function(window){
 
-
-var theCrag = new Object();
-
-theCrag.area = function(id){
-
-	return;
-
-	return new Area({
-		id: 12345,
-		name: 'Gara Gorge'
-	});
-
+var theCrag = {
+	area: function(id){
+		return new Area(id);
+	}
 };
 
-theCrag.Area = function(obj){
-	// make an area
 
+
+/*
+ an Area object
+ */
+var Node = function(){};
+
+Node.prototype.done = function(callback){
+	this.promise.then(function(data){
+		this.data = data.data;
+		callback(this.data);
+	});
+};
+
+var Area = function(id){
+	this.promise = $.ajax({url: 'http://dev.thecrag.com/area/'+id+'/json?jsonp=', dataType: "jsonp", jsonp: "jsonp"});
+};
+Area.prototype = new Node();
+Area.prototype.parent = function(){
+	this.promise.then(function(data){
+		var parent = new Area(data.parent);
+		return parent;
+	});
 }
 
-theCrag.prototype.done = function(callback){
-};
+var Route = function(){};
+Route.prototype = new Node();
+
+window.theCrag = theCrag;
 
 
-
-theCrag.Area.prototype = theCrag;
+})(window);

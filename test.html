@@ -26,13 +26,20 @@ $(function(){
 	assert('Always pass', 1, 1);
 
 
-	theCrag.area('8040888');
-/*
-.done(function(obj){
-		
+	var area = theCrag.area('8040888');
+	assert('Area exists', 1, !!area);
+	assert('Promise exists', 1, !!area.promise);
 
+	area.promise.fail(assert('theCrag API not working', 1, 0));
+
+	area.done(function(obj){
+		
+		assert('Get area', 'Upper Gara Gorge', obj.name);
 	});
-*/
+
+
+	// make an area object
+
 
 	assert('Last test', 1, 1);
 });

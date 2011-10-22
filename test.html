@@ -1,0 +1,47 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+<script src="theCrag.js"></script>
+</head>
+<style>
+.success {
+	background: #efe;
+}
+.failure {
+	background: #fee;
+}
+</style>
+<body>
+Tests:
+<div id="tests"></div>
+
+<script>
+function assert(message, expected, actual){
+	$('#tests').append('<div class="' + (expected == actual ? 'success': 'failure') +'">'+message+': Expected: '+expected+', Actual: '+actual+'</div>');
+}
+$(function(){
+
+
+	assert('Always fail', 1, 0);
+	assert('Always pass', 1, 1);
+
+
+	theCrag.area('8040888');
+/*
+.done(function(obj){
+		
+
+	});
+*/
+
+	assert('Last test', 1, 1);
+});
+
+</script>
+
+
+
+
+
+</body>
+</html>

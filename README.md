@@ -7,6 +7,7 @@
  * Live sync or, manual sync
 
 
+## Basic lookup
 
 ```javascript
 tC(13342327).get(function(node){
@@ -14,14 +15,16 @@ tC(13342327).get(function(node){
 });
 ```
 
-Chaining
+## Chaining
 
 ```javascript
 
-tC(13342327).get(function(node){
+tC(13342327).parent().get(function(node){
 	alert(node.data.title); // return Illusion Buttress
 });
 ```
+
+##
 
 
 
@@ -39,24 +42,5 @@ tC.climber('brendan', 'friends')
 tC(12345).set('title', 'this node sucks');
 tC(12345).set({'title': 'this node sucks'});
 ```
-
-
-Each node has a dirty flag if it has local changes waiting sync
-
-
-Node()
-.parent()
-.children()
-.attr()
-
- Route()
- Area()
-
-
-
- Climber()
- Ascent()
-
-
 
 

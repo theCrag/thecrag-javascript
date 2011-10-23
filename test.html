@@ -22,26 +22,35 @@ function assert(message, expected, actual){
 $(function(){
 
 
-	assert('Always fail', 1, 0);
-	assert('Always pass', 1, 1);
-
+	assert('1 Always fail', 1, 0);
+	assert('2 Always pass', 1, 1);
 
 	var area = theCrag.area('8040888');
-	assert('Area exists', 1, !!area);
-	assert('Promise exists', 1, !!area.promise);
+	assert('3 Area exists', 1, !!area);
+	assert('4 Promise exists', 1, !!area.promise);
 
-	area.promise.fail(assert('theCrag API not working', 1, 0));
+	area.promise.fail(assert('5 theCrag API not working', 1, 0));
 
-	area.done(function(obj){
-		
-		assert('Get area', 'Upper Gara Gorge', obj.name);
+	area.done(function(node){
+		assert('6 Get area', 'Upper Gara Gorge', node.data.name);
 	});
 
+
+	var layabout = theCrag.route('13342327');
+	layabout.done(function(node){
+		assert('7 Get route', 'Layabout', node.data.name);
+	});
+
+	var illusion = layabout.parent();
+	assert('8 Route parent is not null', !null, !!illusion);
+	illusion.done(function(obj){
+		assert('9 Get routes parent', 'Illusion Buttress', obj.data.name);
+	});
 
 	// make an area object
 
 
-	assert('Last test', 1, 1);
+	assert('10 Last test', 1, 1);
 });
 
 </script>

@@ -1,3 +1,24 @@
+/*
+Copyright (c) 2011 Brendan Heywood
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+https://github.com/theCrag/thecrag-javascript
+
+
+TODO - make DAO that do all the ajak in one place.
+TODO - make a caching DAO that leverages the 'live' DAO
+TODO - make any updates mark the object as dirty, store the original object and send the diff to save. Capture the done and clear dirty flag
+
+TODO - make it handle collections as well as single objects
+
+
+ */
+
 (function(window){
 
 var theCrag = {
@@ -6,6 +27,9 @@ var theCrag = {
 	},
 	route: function(id){
 		return new Route(id);
+	},
+	world: function(){
+		return new Area('7546063');
 	}
 };
 
@@ -22,7 +46,7 @@ var Node = function(){
 /*
  * Adds a callback for once we have data available
  */
-Node.prototype.done = function(callback){
+Node.prototype.get = function(callback){
 	var node = this;
 	this.promise.then(function(data){
 		node.data = data.data;
@@ -31,6 +55,11 @@ Node.prototype.done = function(callback){
 		alert('Error: '+error);
 	});
 };
+
+/*
+ *
+ */
+
 
 /*
  * Return a Parent with a promise for data

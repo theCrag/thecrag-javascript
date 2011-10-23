@@ -8,32 +8,37 @@
 
 
 
-tC.route(12345)  // returns a node object (doesn't actually go to netowrk until you ask it for data
+```javascript
+tC(13342327).get(function(node){
+	alert(node.data.title); // return Layabout
+});
+```
 
-// When you ask for an attribute it:
- * Is that attr loaded? Yes then return it
- * No, lookup which API is needed (route, area, etc?)
+Chaining
+
+```javascript
+
+tC(13342327).get(function(node){
+	alert(node.data.title); // return Illusion Buttress
+});
+```
 
 
 
-tC(12345).attr('title'); // return Kachoong
 
+Not yet implemented:
+
+```javascript
 
 
 tC.climber(12345)
 tC.climber('brendan', 'friends')
 
 
-
-
-
-
-
-
 // Setting attributes
-tC(12345).attr('title', 'this node sucks');
-tC(12345).attr({'title': 'this node sucks'});
-
+tC(12345).set('title', 'this node sucks');
+tC(12345).set({'title': 'this node sucks'});
+```
 
 
 Each node has a dirty flag if it has local changes waiting sync

@@ -21,6 +21,33 @@ TODO - make it handle collections as well as single objects
 
 (function(window){
 
+
+/*
+ * A collection of DAO for different use cases, life, live with caching, offline with manifest+WebDB, Titanium etc
+ * Each DAO implements get and set which return a promise
+ */
+
+var host = 'http://dev.thecrag.com/';
+
+var DAO = {
+	live: {
+		get: function(type, id, extras, save){
+			type = type == 'area' ? 'node' : type; // World isn't an area!!
+			if (!extras) extras = [];
+			extras.push('ancestors');
+			data = "show="+ extras.join(',');
+			return $.ajax({
+				url: host+'api/'+type+'/id/'+id,
+				data: data,
+				dataType: "jsonp", 
+				jsonp: "jsonp"
+			});
+		},
+		set: function(data){
+		}
+	}
+};
+
 var theCrag = {
 	area: function(id){
 		return new Area(id);
@@ -30,8 +57,12 @@ var theCrag = {
 	},
 	world: function(){
 		return new Area('7546063');
-	}
+	},
+	DAO: DAO.live
 };
+
+
+
 
 
 
@@ -70,7 +101,7 @@ Node.prototype.parent = function(){
 	var deferred = $.Deferred();
 	this.promise.then(function(data){
 		var parentId = data.parent || data.data.ancestors[data.data.ancestors.length-1].id;
-		var promise = $.ajax({url: 'http://dev.thecrag.com/area/'+parentId+'/json', dataType: "jsonp", jsonp: "jsonp"});
+		var promise = theCrag.DAO.get('area', parentId);
 		promise.done(function(obj){
 			node.data = obj.data;
 			deferred.resolve(node);
@@ -86,14 +117,14 @@ Node.prototype.parent = function(){
 var Area = function(id){
 	this.type = 'area';
 	if (id){
-		this.promise = $.ajax({url: 'http://dev.thecrag.com/area/'+id+'/json', dataType: "jsonp", jsonp: "jsonp"});
+		this.promise = theCrag.DAO.get(this.type, id);
 	}
 };
 Area.prototype = new Node();
 
 var Route = function(id){
 	this.type = 'route';
-	this.promise = $.ajax({url: 'http://dev.thecrag.com/route/'+id+'/json', dataType: "jsonp", jsonp: "jsonp"});
+	this.promise = theCrag.DAO.get(this.type, id);
 };
 Route.prototype = new Node();
 

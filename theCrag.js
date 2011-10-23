@@ -10,7 +10,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 https://github.com/theCrag/thecrag-javascript
 
 
-TODO - make DAO that do all the ajak in one place.
 TODO - make a caching DAO that leverages the 'live' DAO
 TODO - make any updates mark the object as dirty, store the original object and send the diff to save. Capture the done and clear dirty flag
 

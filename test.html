@@ -49,8 +49,27 @@ $(function(){
 
 	// make an area object
 
-	var world = theCrag.world().get(function(node){
-		assert('10 World', 'World', node.data.name);
+	var world = tC.world();
+	assert('10 World exists', false, !world);
+	world.get(function(node){
+		assert('11 World', 'World', node.data.name);
+	});
+
+	// get an areas children
+
+	
+
+	var children = world.children();
+	assert('20 Children exists', false, !children);
+	children.get(function(nodeset){
+
+		var australia = nodeset.nodes[1];
+		assert('21 Australia', 'Australia', australia.data.name);
+		australia.parent().get(function(node){
+			assert('22 World again', 'World', node.data.name);
+		});
+
+
 	});
 
 	assert('1000 Last test', 1, 1);

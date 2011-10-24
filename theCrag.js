@@ -33,7 +33,7 @@ var DAO = {
 		get: function(type, id, extras, save){
 			type = type == 'area' ? 'node' : type; // World isn't an area!!
 			if (!extras) extras = [];
-			extras.push('ancestors');
+			extras.push('ancestors', 'children');
 			data = "show="+ extras.join(',');
 			return $.ajax({
 				url: host+'api/'+type+'/id/'+id,
@@ -63,10 +63,39 @@ var theCrag = {
 
 
 
+var NodeSet = function(){
+}
+
+/*
+ * Adds a callback for once we have data available
+ */
+NodeSet.prototype.get = function(callback){
+	var nodeset = this;
+	this.promise.then(function(data){
+		nodeset.data = data.data;
+		callback(nodeset);
+	}, function(error){
+		alert('Error: '+error);
+	});
+};
+
+NodeSet.prototype.set = function(data){
+	// data should be an array
+	this.nodes = [];
+	var c;
+	var node;
+	for(c=0; c<data.length; c++){
+		node = new Node();
+		node.data = data[c];
+		this.nodes[c] = node;
+		node.promise = $.Deferred().resolve(node);
+	}
+};
 
 
 /*
- an Area object
+ a Node object
+ * Can actually represent a set of Nodes as well
  */
 var Node = function(){
 	this.type = 'unknown';
@@ -98,8 +127,9 @@ Node.prototype.parent = function(){
 	var parent = new Area();
 	var node = this;
 	var deferred = $.Deferred();
-	this.promise.then(function(data){
-		var parentId = data.parent || data.data.ancestors[data.data.ancestors.length-1].id;
+	this.promise.then(function(node){
+		var parentId = node.data.parentID || node.data.ancestors[node.data.ancestors.length-1].id;
+
 		var promise = theCrag.DAO.get('area', parentId);
 		promise.done(function(obj){
 			node.data = obj.data;
@@ -112,6 +142,34 @@ Node.prototype.parent = function(){
 	parent.promise = deferred.promise();
 	return parent;
 }
+
+/*
+ * Return a Children NodeSet with a promise for data
+ */
+Node.prototype.children = function(){
+	var node = this;
+
+	var children = new NodeSet();
+	var deferred = $.Deferred();
+	children.promise = deferred.promise();
+
+	this.promise.then(function(data){
+		var childs = data.children;
+		if (childs){
+			children.set(childs);
+			deferred.resolve(children);
+		} else {
+			// go get it
+			deferred.resolve(children);
+		}
+	}, function(error){
+		deferred.fail();
+		alert('Error: '+error);
+	});
+	return children;
+}
+
+
 
 var Area = function(id){
 	this.type = 'area';
@@ -128,6 +186,7 @@ var Route = function(id){
 Route.prototype = new Node();
 
 window.theCrag = theCrag;
+window.tC = theCrag;
 
 
 })(window);

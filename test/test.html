@@ -1,85 +1,86 @@
 <html>
 <head>
 <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-<script src="theCrag.js"></script>
-</head>
-<style>
-.success {
-	background: #efe;
-}
-.failure {
-	background: #fee;
-}
-</style>
-<body>
-Tests:
-<div id="tests"></div>
-
+<script src="../lib/theCrag.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
+<script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
 <script>
-function assert(message, expected, actual){
-	$('#tests').append('<div class="' + (expected == actual ? 'success': 'failure') +'">'+message+': Expected: '+expected+', Actual: '+actual+'</div>');
-}
 $(function(){
+	test("Basic read tests", function(){
 
+		var area = theCrag.area('8040888');
+		notEqual(null, !!area, '1 Area exists');
+		notEqual(null, !!area.promise, '2 promise exists');
 
-	assert('1 Always fail', 1, 0);
-	assert('2 Always pass', 1, 1);
+/*
+		area.promise.fail(function(){
+			ok('5 theCrag API not working')
+		});
+*/
 
-	var area = theCrag.area('8040888');
-	assert('3 Area exists', 1, !!area);
-	assert('4 Promise exists', 1, !!area.promise);
-
-	area.promise.fail(assert('5 theCrag API not working', 1, 0));
-
-	area.get(function(node){
-		assert('6 Get area', 'Upper Gara Gorge', node.data.name);
-	});
-
-
-	var layabout = theCrag.route('13342327');
-	layabout.get(function(node){
-		assert('7 Get route', 'Layabout', node.data.name);
-	});
-
-	var illusion = layabout.parent();
-	assert('8 Route parent is not null', !null, !!illusion);
-	illusion.get(function(node){
-		assert('9 Get routes parent', 'Illusion Buttress', node.data.name);
-	});
-
-	// make an area object
-
-	var world = tC.world();
-	assert('10 World exists', false, !world);
-	world.get(function(node){
-		assert('11 World', 'World', node.data.name);
-	});
-
-	// get an areas children
-
-	
-
-	var children = world.children();
-	assert('20 Children exists', false, !children);
-	children.get(function(nodeset){
-
-		var australia = nodeset.nodes[1];
-		assert('21 Australia', 'Australia', australia.data.name);
-		australia.parent().get(function(node){
-			assert('22 World again', 'World', node.data.name);
+		stop();
+		area.get(function(node){
+			equal('Upper Gara Gorge', node.data.name, '3 get an area');
+			start();
 		});
 
 
+		var layabout = theCrag.route('13342327');
+
+		stop();
+		layabout.get(function(node){
+			equal('Layabout', node.data.name, '7 get route');
+			start();
+		});
+
+		var illusion = layabout.parent();
+		notEqual(null, illusion, '8 Route parent is not null');
+		stop();
+		illusion.get(function(node){
+			equal('Illusion Buttress', node.data.name, '9 get Route parent');
+			start();
+		});
+
+		// make an area object
+
+		var world = tC.world();
+		notEqual(null, world, '10 World exists');
+		stop();
+		world.get(function(node){
+			equal('World', node.data.name, '11 World is good');
+			start();
+		});
+
+
+
+		// get an areas children
+
+
+		var children = world.children();
+		equals(false, !children, '20 chldren exists');
+		stop();
+		children.get(function(nodeset){
+
+			var australia = nodeset.nodes[1];
+			equal('Australia', australia.data.name, '21 Australia');
+			stop();
+			australia.parent().get(function(node){
+				equal('World', node.data.name, '22 World again');
+				start();
+			});
+			start();
+
+		});
+
 	});
-
-	assert('1000 Last test', 1, 1);
 });
-
 </script>
-
-
-
-
-
+<body>
+ <h1 id="qunit-header">QUnit example</h1>
+ <h2 id="qunit-banner"></h2>
+ <div id="qunit-testrunner-toolbar"></div>
+ <h2 id="qunit-userAgent"></h2>
+ <ol id="qunit-tests"></ol>
+ <div id="qunit-fixture">test markup, will be hidden</div>
 </body>
 </html>

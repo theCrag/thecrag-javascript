@@ -1,0 +1,27 @@
+{
+   "name": "thecrag-javascript",
+   "version": "0.1.0",
+   "description": "A javascript wrapper for theCrag's REST API",
+   "contributors": [
+       {
+           "name": "Brendna Heywood",
+           "email": "brendan.heywood@gmail.com",
+           "web": "http://www.thecrag.com" 
+       } 
+   ],
+   "bugs": {
+       "web": "https://github.com/theCrag/thecrag-javascript/issues" 
+   },
+   "licenses": [
+       {
+           "type": "LGPLv3+",
+           "url": "http://www.gnu.org/licenses/lgpl.html"
+       } 
+   ],
+   "repositories": [
+       {
+           "type": "git",
+           "url": "https://github.com/theCrag/thecrag-javascript.git"
+       } 
+   ],
+}
